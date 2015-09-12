@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# backlogのurl
+# 例: https://hoge.backlog.jp/
+BACKLOG_URL=""
+
+# Slackで発行したHubot用token
+SLACK_API_HUBOT_TOKEN=""
+
+# backlogで設定するwebhook urlのドメイン名と投稿Slack Channelの間の部分
+# 例: https://hoge.backlog.jp/{ this }/channel_name
+WEBHOOK_KEYWORD=""
+
+# hubotで使用するport
+# 他のconfigと被らない値にする
+USE_PORT=8080
+
