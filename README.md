@@ -5,14 +5,18 @@ IntegrateSlack
 How to Integration
 --------------------------------------------------------------------------------
 
+きほんSlackとBacklog側で設定して、hubotのconfigにIntegrationしたいSlackとBacklogの設定を追加するだけ。  
+最後にそのconfig呼んで起動させる。
+
+
 1. SlackでHubot Integration登録しTokenを払い出す  
 メニューの `Configure Integrations`から
 
 2. サーバでIntegration対象のconfigを追加
 ```
-sudo su
+sudo su # 基本rootで作業したほうがトラブらない
 cd /usr/src/hubot
-ls -l config # 使用済みポート番号確認
+ls -l config # 使用済みポート番号をファイル名から確認
 cp config/example config/{config_name}
 vim {config_name} # 編集、内容はコメント参照
 sh hubot-launch.sh {config_name}
@@ -50,15 +54,15 @@ hubotの作り方
 
 2. 必要なnpmパッケージのインストール
 ```
-$ npm update -g npm # npm アップデート
-$ npm install -g yo generator-hubot hubot coffee-script
+npm update -g npm # npm アップデート
+npm install -g yo generator-hubot hubot coffee-script
 ```
 
 3. hubot雛形作成
 ```
-$ mkdir hubot
-$ cd bot
-$ yo hubot
+mkdir hubot
+cd bot
+yo hubot
 # > Owner: <Enter>
 # > Bot name: IntegrateSlack
 # > Description: Integrate Slack
@@ -69,14 +73,14 @@ adapterさえ"slack"と入力する点のみ必須。
 
 4. backlog用script作成
 ```
-$ touch script/backlog.coffee
+touch script/backlog.coffee
 ```
 中身はソース参照。
 
 5. configファイル作成
 ```
-$ mkdir config
-$ vim config/example
+mkdir config
+vim config/example
 ```
 このexampleを雛形に、追加する設定毎にファイルを増やす事になる。
 
@@ -108,63 +112,62 @@ AWSのセキュリティグループのインバウンドに以下を追加
 ### 2. 必要なのをインストール
 
 #### nodejs/npm install
-
-```
-$ sudo su
+<pre>
+sudo su
 
 # nodebrew install
-$ cd /usr/local/src
-$ wget git.io/nodebrew
-$ chmod +x nodebrew
+cd /usr/local/src
+wget git.io/nodebrew
+chmod +x nodebrew
 
 # nodebrew setup
-$ export NODEBREW_ROOT=/opt/nodebrew
-$ ./nodebrew setup
-$ ln -s /opt/nodebrew/completions/bash/nodebrew-completion /etc/bash_completion.d/
-$ vim /etc/profile.d/nodebrew.sh
-> export PATH=/opt/nodebrew/current/bin:$PATH
-> export NODEBREW_ROOT=/opt/nodebrew
-$ source /etc/profile
+export NODEBREW_ROOT=/opt/nodebrew
+./nodebrew setup
+ln -s /opt/nodebrew/completions/bash/nodebrew-completion /etc/bash_completion.d/
+vim /etc/profile.d/nodebrew.sh # 以下行を記述
+# > export PATH=/opt/nodebrew/current/bin:$PATH
+# > export NODEBREW_ROOT=/opt/nodebrew
+source /etc/profile
 
 # node install
-$ ./nodebrew install-binary v4.0.0
-$ ./nodebrew use v4.0.0
+./nodebrew install-binary v4.0.0
+./nodebrew use v4.0.0
 
 # check
-$ node -v && npm -v
-```
+node -v && npm -v
+</pre>
 
 #### redis install & chkconfig on
 ```
-$ rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
-$ yum --enablerepo=remi -y install redis
-$ /etc/init.d/redis start
-$ chkconfig redis on
+rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
+yum --enablerepo=remi -y install redis
+/etc/init.d/redis start
+chkconfig redis on
 ```
 
 #### git install
 ```
-$ yum -y install git
+yum -y install git
 ```
 
 #### npm package install
 ```
-$ npm install -g hubot coffee-script forever
+npm install -g hubot coffee-script forever
 ```
 
 ### 3. サーバに作成したhubotを展開
 ```
-$ cd /usr/local/src/
-$ git clone {https git Repository}
-$ cd {Repository directory}
-$ cp config/example config/BACKLOG_PROJECTNAME-{使用port番号}
-$ vim config/BACKLOG_PROJECTNAME-{使用port番号}
+cd /usr/local/src/
+git clone {https git Repository}
+cd {Repository directory}
+cp config/example config/{BACKLOG_PROJECTNAME-PORT}
+vim config/{BACKLOG_PROJECTNAME-PORT}
 ```
 ポート番号は他のconfigと被らないように、インバウンドで設定した範囲内のものを使用
 
 ### 4. 起動
 ```
-$ sh hubot-launch.sh backlog-hogehoge-{使用port番号} # パラメータとしてconfigファイル名を渡す
+sh hubot-launch.sh {BACKLOG_PROJECTNAME-PORT} # パラメータとしてconfigファイル名を渡す
 ```
 
 
@@ -175,7 +178,7 @@ $ sh hubot-launch.sh backlog-hogehoge-{使用port番号} # パラメータとし
 - defaultで持っているものを有効化するならhubot-scripts.jsonに追記
 - 配布されているなら`$ npm install --save hoge/fuga`とか
 
-最後に`$ forever restartall`でデーモン化したhubot達を再起動
+最後に`$ forever restartall`でデーモン化したhubot達を再起動  
 (将来的にforeverでhubot以外のnode.js scriptを永続化する場合、ちゃんと一個づつ再起動しよう！)
 
 
