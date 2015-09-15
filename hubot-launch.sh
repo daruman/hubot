@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # $ sh launch-hubot.sh {config name}
-# config file path: ./conf/
+# config file path: ./config/
 
 set -e
 
