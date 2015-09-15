@@ -1,10 +1,10 @@
 # Description:
 #   Backlog to Slack
 #
-# Commands:
-#   $ hubot -a slack "$BACKLOG_URL" "$WEBHOOK_KEYWORD"
-#
-# [最近の更新の取得 | Backlog API | Nulab Developers](http://developer.nulab-inc.com/ja/docs/backlog/api/2/get-activities)
+# Notes:
+#   BacklogとSlackのIntegration用hubot  
+#   Backlogのwebhookから送信されるtype idについては以下参照  
+#   [最近の更新の取得 | Backlog API | Nulab Developers](http://developer.nulab-inc.com/ja/docs/backlog/api/2/get-activities)
 
 backlogUrl = process.argv[process.argv.length - 2]
 webhookKeyword = process.argv[process.argv.length - 1]
